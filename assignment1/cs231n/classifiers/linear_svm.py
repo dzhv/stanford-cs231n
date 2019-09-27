@@ -63,7 +63,7 @@ def svm_loss_naive(W, X, y, reg):
     # compute gradient average
     dW /= num_train
     # add regularization gradient
-    dW += 2 * W
+    dW += reg * 2 * W
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     
@@ -132,7 +132,7 @@ def svm_loss_vectorized(W, X, y, reg):
     # compute gradient average
     dW /= num_train
     # add regularization gradient
-    dW += 2 * W
+    dW += reg * 2 * W
 
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
