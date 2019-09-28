@@ -275,6 +275,11 @@ class FullyConnectedNet(object):
                 out, cache = affine_relu_forward(out, self.params[f"W{layer}"], self.params[f"b{layer}"])
             cache_stack.append(cache)
 
+            # Dropout
+            if self.use_dropout:                
+                out, cache = dropout_forward(out, self.dropout_param)
+                cache_stack.append(cache)
+
         # last affine layer
         scores, cache = affine_forward(out, self.params[f"W{self.num_layers}"], self.params[f"b{self.num_layers}"])
         cache_stack.append(cache)
@@ -314,6 +319,10 @@ class FullyConnectedNet(object):
             if layer == self.num_layers:  # if it's the affine layer before softmax
                 dout, dW, db = affine_backward(dout, cache)
             else:
+                if self.use_dropout:                    
+                    dout = dropout_backward(dout, cache)
+                    cache = cache_stack.pop()
+
                 if self.normalization=='batchnorm':
                     dout, dW, db, dgamma, dbeta = affine_batchnorm_relu_backward(dout, cache)
                     grads[f"gamma{layer}"] = dgamma
